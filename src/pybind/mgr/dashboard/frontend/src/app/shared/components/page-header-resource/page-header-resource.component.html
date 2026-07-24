@@ -1,0 +1,79 @@
+<header
+  class="cd-resource-page-header"
+  data-testid="resource-page-header"
+>
+  <div class="cd-resource-page-header__content">
+    @if (showBreadcrumbs && breadcrumbs.length) {
+      <div class="cd-resource-page-header__breadcrumbs cds--type-body-compact-01">
+        <cds-breadcrumb
+          [noTrailingSlash]="true"
+          *ngIf="breadcrumbs.length"
+        >
+          <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+            <cds-breadcrumb-item
+              *ngIf="!last && crumb.path !== null"
+              href="#/{{ crumb.path }}"
+            >
+              {{ crumb.text }}
+            </cds-breadcrumb-item>
+
+            <cds-breadcrumb-item
+              *ngIf="last || crumb.path === null"
+              data-testid="active-breadcrumb-item"
+            >
+              {{ crumb.text }}
+            </cds-breadcrumb-item>
+          </ng-container>
+        </cds-breadcrumb>
+      </div>
+    }
+
+    <div class="cd-resource-page-header__title-row">
+      <div class="cd-resource-page-header__title-group">
+        <h2 class="cds--type-heading-05">{{ title }}</h2>
+
+        @if (status) {
+          <span
+            class="cd-resource-page-header__status cd-resource-page-header__status--{{
+              status.type
+            }}"
+          >
+            <cd-icon [type]="(status.type | overviewStatus).icon"></cd-icon>
+            <span>{{ status.text }}</span>
+          </span>
+        }
+
+        @if (tags.length) {
+          <span class="cd-resource-page-header__tags">
+            @for (tag of tags; track tag) {
+              <cds-tag type="blue">{{ tag }}</cds-tag>
+            }
+          </span>
+        }
+      </div>
+
+      @if (actions.length) {
+        <div class="cd-resource-page-header__actions">
+          <cds-menu-button
+            kind="tertiary"
+            size="lg"
+            menuId="resource-header-actions-menu"
+            menuAlignment="bottom-end"
+            label="Actions"
+            i18n-label
+          >
+            @for (action of actions; track action.label) {
+              <cds-menu-item
+                [label]="action.label"
+                [disabled]="action.disabled"
+                (click)="runAction(action)"
+                [title]="action.label"
+              >
+              </cds-menu-item>
+            }
+          </cds-menu-button>
+        </div>
+      }
+    </div>
+  </div>
+</header>
